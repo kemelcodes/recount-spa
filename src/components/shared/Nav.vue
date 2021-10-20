@@ -15,26 +15,37 @@
         <b-nav-item-dropdown right v-if="isAuth">
           <!-- Using 'button-content' slot -->
           <template #button-content>
-            <em>User</em>
+            <em>{{ user.name }}</em>
           </template>
+          <b-dropdown-item @click="changeUser">Change User</b-dropdown-item>
           <b-dropdown-item href="#">Profile</b-dropdown-item>
           <b-dropdown-item href="#">Settings</b-dropdown-item>
         </b-nav-item-dropdown>
       </b-navbar-nav>
     </b-collapse>
   </b-navbar>
+  <signIn/>
 </div>
 </template>
 <script>
+
   import { mapGetters } from 'vuex';
+  import signIn from '@/components/shared/signIn';
 
 	export default { 
+    components: { signIn },
+
     computed: { 
       ...mapGetters({ user: 'user/active'}),
 
       isAuth () { 
-        console.log('user', this.user);
         return this.user != null ? true : false;
+      }
+    },
+
+    methods: { 
+      changeUser () { 
+        this.$bvModal.show('user-sign-in');
       }
     }
 	}

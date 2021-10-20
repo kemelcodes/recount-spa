@@ -7,7 +7,18 @@ const state = {
 	index: null,
 };
 
-const getters = { 
+const getters = {
+	relatives: (getters) => (user) => getters.list.filter(relative => { 
+		const { parentId1, parentId2, spouseId } = user;
+		if(
+				relative.id === parentId1 || 
+				relative.id === parentId2 ||
+				relative.id === spouseId
+			) { 
+			return relative;
+		}
+		
+	}), 
 	list: state => state.index != null ? state.index : [],
 	active: state => state.user != null ? state.user : null,
 };
@@ -24,6 +35,7 @@ const actions = {
 	},
 	loadData ({ commit }, { user }) { 
 		try { 
+			console.log(user)
 			commit('FETCH_USER_ACTIVE', { user });
 		} catch (e) { 
 			console.error(e.toString());
@@ -40,10 +52,10 @@ const actions = {
 
 const mutations = { 
 	[types.FETCH_USER_ACTIVE] (state, { user }) { 
-		state.active = user;
+		state.user = user;
 	},
 	[types.FETCH_USER_LIST] (state, { list }) { 
-		state.list = list;
+		state.index = list;
 	},
 	/*[types.FETCH_USER_PROFILE] (state, { id }) { 
 
